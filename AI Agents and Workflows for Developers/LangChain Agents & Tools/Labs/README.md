@@ -25,7 +25,7 @@ Start here if you are new to LangChain or LLM APIs in Python.
 
 | # | Notebook | What You'll Learn |
 |---|----------|-------------------|
-| 3 | [LCEL](./LCEL.ipynb) | LangChain Expression Language — how to compose chains using the `|` pipe operator, `Runnable` interface, `RunnablePassthrough`, and build reusable pipelines |
+| 3 | [LCEL](./LCEL.ipynb) | LangChain Expression Language — how to compose chains using the `\|` pipe operator, `Runnable` interface, `RunnablePassthrough`, and build reusable pipelines |
 
 ---
 
