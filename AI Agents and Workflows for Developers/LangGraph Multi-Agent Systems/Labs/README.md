@@ -77,7 +77,20 @@ Extends AI Agent Part 2 by adding a **checkpointer** — the mechanism that give
 
 ---
 
-### 6. Parallel Execution (Part 1).ipynb
+### 6. Stores.ipynb
+
+**Concepts:** Cross-thread storage, context, `ToolRuntime`, namespaced key-value store
+
+Extends Checkpointers by introducing two new ideas that work alongside the checkpointer:
+
+- **Context** — read-only per-invocation metadata (e.g. `user_id`) passed to `graph.invoke(..., context=...)` and injected into tools via `ToolRuntime`. Unlike state, it never changes as nodes run.
+- **`InMemoryStore`** — a global key-value store shared **across all threads**. Checkpoints are scoped to one conversation; the store is not. Use it for data that should persist beyond a single session (user preferences, activity logs, etc.)
+- **Namespaces** — store entries are organised by tuple-based namespaces like `("users", "troeff_1", "recent_activity")`
+- **`ToolRuntime`** — a special parameter tools declare to receive the context and store automatically at runtime (LangGraph injects it; you never pass it manually)
+
+---
+
+### 7. Parallel Execution (Part 1).ipynb
 
 **Concepts:** Fan-out, fan-in, parallel node execution, custom reducers
 
@@ -90,7 +103,7 @@ Introduces **parallel execution** — running multiple nodes simultaneously. You
 
 ---
 
-### 7. Parallel Execution (Part 2).ipynb
+### 8. Parallel Execution (Part 2).ipynb
 
 **Concepts:** Verification step, combining parallel execution with post-processing
 
@@ -103,7 +116,7 @@ Extends Part 1 by adding a **verifier node** that runs after some of the paralle
 
 ---
 
-### 8. Interrupts.ipynb
+### 9. Interrupts.ipynb
 
 **Concepts:** Human-in-the-loop, `interrupt()`, `Command(resume=...)`, pausing and resuming graphs
 
@@ -114,6 +127,22 @@ The most advanced notebook. Replaces the automated verifier from Part 2 with **r
 - Why a checkpointer is *required* for interrupts to work (state must be persisted between pauses)
 - How to iterate through multiple pending approvals one at a time
 - How interrupted state appears in checkpoints and state history
+
+---
+
+## Quick Reference
+
+| # | Notebook | Key concepts |
+|---|---|---|
+| 1 | Simple Graphs (Part 1) | State, nodes, linear graphs, reducers |
+| 2 | Simple Graphs (Part 2) | Conditional edges, branching, routing |
+| 3 | AI Agent (Part 1) | LLM tools, ReAct loop, `ToolNode` |
+| 4 | AI Agent (Part 2) | Custom state, lifecycle hooks |
+| 5 | Checkpointers | Persistent memory, threads, conversation history |
+| 6 | Stores | Cross-thread storage, context, `ToolRuntime` |
+| 7 | Parallel Execution (Part 1) | Fan-out/fan-in, parallel nodes |
+| 8 | Parallel Execution (Part 2) | Verification step, combining parallel + post-processing |
+| 9 | Interrupts | Human-in-the-loop, pausing/resuming graphs |
 
 ---
 
@@ -133,3 +162,7 @@ The most advanced notebook. Replaces the automated verifier from Part 2 with **r
 | **ReAct loop** | Model → (call tool?) → tools → model → repeat until done |
 | **Interrupt** | Pauses the graph mid-execution to wait for human input |
 | **`Command(resume=...)`** | Resumes a paused graph, passing the human's decision back to the interrupted node |
+| **Store** | A global key-value store (`InMemoryStore`) shared across all threads — unlike checkpoints which are per-thread |
+| **Namespace** | A tuple used to organise store entries, e.g. `("users", "user_id", "recent_activity")` |
+| **Context** | Read-only per-invocation metadata passed to `graph.invoke(..., context=...)` — not part of the mutable state |
+| **`ToolRuntime`** | A parameter tools can declare to receive the context and store automatically at runtime |
